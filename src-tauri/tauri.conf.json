@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "kitchen",
-  "version": "0.1.0",
-  "identifier": "com.kitchen.app",
+  "productName": "chickencoop",
+  "version": "1.0.0",
+  "identifier": "com.chicken-coop.cyou",
   "build": {
     "beforeDevCommand": "yarn dev",
     "devUrl": "http://localhost:1420",
@@ -12,9 +12,11 @@
   "app": {
     "windows": [
       {
-        "title": "kitchen",
-        "width": 800,
-        "height": 600
+        "fullscreen": true,
+        "resizable": true,
+        "title": "Chicken Coop",
+        "width": 1000,
+        "height": 800
       }
     ],
     "security": {
@@ -31,5 +33,26 @@
       "icons/icon.icns",
       "icons/icon.ico"
     ]
+  },
+  "plugins": {
+    "updater": {
+      "active": true,
+      "windows": {
+        "installMode": "passive"
+      },
+      "endpoints": [
+        "https://gist.githubusercontent.com/abouhilalbadr/6866958b56e6f0b32a49e676ca78fd4e/raw/"
+      ],
+      "dialog": true,
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDY0N0FENEVGREIwRkU0MQpSV1JCL3JEOVRxMUhCbmJIK1ZDQmNHUGVKRVlrelFLVU1lSGVIS09YbmJIRFRPM0pReENwemVCbAo="
+    },
+    "http": {
+      "all": true,
+      "request": true
+    },
+    "shell": {
+      "all": false,
+      "open": true
+    }
   }
 }
