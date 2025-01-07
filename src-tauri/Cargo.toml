@@ -1,6 +1,6 @@
 [package]
 name = "chickencoop"
-version = "2"
+version = "1.0.3"
 description = "Chicken Coop kitchen app"
 authors = ["you"]
 edition = "2021"
