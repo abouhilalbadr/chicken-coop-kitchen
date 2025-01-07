@@ -1,7 +1,7 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
   "productName": "chickencoop",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "identifier": "com.chicken-coop.cyou",
   "build": {
     "beforeDevCommand": "yarn dev",
@@ -25,6 +25,7 @@
   },
   "bundle": {
     "active": true,
+    "createUpdaterArtifacts": true,
     "targets": "all",
     "icon": [
       "icons/32x32.png",
@@ -40,11 +41,11 @@
       "windows": {
         "installMode": "passive"
       },
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDVDRTA3MDRFRkMxRDVDNTIKUldSU1hCMzhUbkRnWERXUUVxSlJCSXk0ejlOcmR1YVNLUWUwLzBtMUF3MGJjYTRWckNpbkdQL3oK",
       "endpoints": [
         "https://gist.githubusercontent.com/abouhilalbadr/6866958b56e6f0b32a49e676ca78fd4e/raw/"
       ],
-      "dialog": true,
-      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDVDRTA3MDRFRkMxRDVDNTIKUldSU1hCMzhUbkRnWERXUUVxSlJCSXk0ejlOcmR1YVNLUWUwLzBtMUF3MGJjYTRWckNpbkdQL3oK"
+      "dialog": true
     },
     "http": {
       "all": true,
