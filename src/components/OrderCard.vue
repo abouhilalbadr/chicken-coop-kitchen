@@ -38,6 +38,7 @@ const setType = (type) => {
           <span v-if="product.viandes && product.viandes.length > 0">Les viandes: {{ product.viandes.join(',  ') }}</span>
           <span v-if="product.sauces && product.sauces.length > 0">Les sauces: {{ product.sauces.join(', ') }}</span>
           <span v-if="product.extras && product.extras.length > 0">Les extras: {{ product.extras.join(', ') }}</span>
+          <span v-if="product.note" class="text-[red] font-bold">Note: {{ product.note }}</span>
         </p>
       </div>
     </div>
