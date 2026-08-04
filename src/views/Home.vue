@@ -8,17 +8,23 @@ const router = useRouter()
 const redirectPage = () => {
   router.push('/password')
 }
-
 </script>
 
 <template>
-  <div class="flex flex-col justify-center items-center w-full min-h-screen gap-6 p-8">
-    <img src="../assets/images/logo.png" alt="Chicken Coop Logo" class="w-80">
-    <div class="flex justify-center gap-4 w-full lg:w-2/3 mt-16">
-      <button @click="redirectPage" class="group transition flex flex-col items-center gap-2 bg-white border-2 border-main rounded-md w-64 py-4 hover:bg-main">
-        <Kitchen class="h-24 fill-main group-hover:fill-white" />
-        <span class="text-main group-hover:text-white font-bree-serif font-bold text-3xl">Cuisine</span>
-      </button>
-    </div>
+  <div class="min-h-screen flex flex-col justify-center items-center gap-10 p-8">
+    <img src="../assets/images/logo.png" alt="Chicken Coop" class="w-56">
+
+    <!-- One destination, so it is one target: the whole card is the button -->
+    <button
+      @click="redirectPage"
+      class="group w-[380px] max-w-full rounded-xl bg-white border border-black/[.07] shadow-sm px-8 py-10 flex flex-col items-center gap-4
+        transition-shadow hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-main/40"
+    >
+      <span class="w-20 h-20 rounded-xl bg-main/[.10] flex items-center justify-center transition-colors group-hover:bg-main/20">
+        <Kitchen class="h-12 fill-main" />
+      </span>
+      <span class="font-bree-serif text-2xl">Cuisine</span>
+      <span class="text-[13px] text-black/50">Écran des commandes</span>
+    </button>
   </div>
 </template>

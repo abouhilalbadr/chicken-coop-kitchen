@@ -35,7 +35,8 @@ export const useStore = defineStore('main', {
         this.orders.unshift(order)
         this.alert.show = true
         this.alert.status = 'success'
-        this.alert.message = `Nouvelle commande N&#186; ${order.number}`
+        // Swal renders its title as text, so the entity has to be the character
+        this.alert.message = `Nouvelle commande N° ${order.number}`
         setTimeout(() => {
           this.alert = {
             show: false,

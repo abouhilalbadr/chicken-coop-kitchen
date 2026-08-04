@@ -3,51 +3,38 @@
 @tailwind utilities;
 
 body {
-  @apply font-roboto text-black
+  @apply font-roboto text-black bg-body;
 }
 
 button {
-  @apply focus:outline-none
+  @apply focus:outline-none;
 }
 
+/* Scrollbars stay visible: a column holding more orders than fit has to say so. */
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-thumb {
+  background: rgba(35, 34, 41, .18);
+  border-radius: 999px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* The PIN pad. Keys are white cards on the warm field, pressed state is the
+   brand colour — the same pad as the till. */
 .keyboard button {
-  @apply relative flex items-center justify-center text-3xl transition-all duration-500 rounded-md bg-gray text-black active:scale-95 active:duration-[0s] active:bg-main active:text-white
-  ;
+  @apply relative flex items-center justify-center text-3xl font-medium rounded-xl bg-white text-black border border-border
+    transition-colors duration-100 hover:bg-gray-light active:bg-main active:border-main active:text-white active:duration-[0s];
 }
 
-.title::after {
-  @apply content-[''] absolute -bottom-2 left-0 w-[25px] h-0.5 rounded-md bg-main transition-all;
-}
-
-.details::after {
-  @apply content-[''] absolute bg-gradient-to-t from-black/90 w-full h-full bottom-0 left-0 rounded-md;
-}
-
-.details * {
-  @apply z-10 relative;
-}
-
-.cart-item::after {
-  @apply content-[''] transition absolute top-0 left-0
-}
-
-.cart-item:hover::after {
-  @apply w-full h-full bg-black/60 rounded-md
-}
-
-.small-modal {
-  @apply w-full lg:w-4/5;
-}
-
-.normal-modal {
-  @apply w-full lg:w-5/6;
-}
-
-/* CSS Loading */
+/* Loading spinner */
 .loading {
-  width: 25px;
-  height: 25px;
-  border: 2px solid #FFF;
+  width: 22px;
+  height: 22px;
+  border: 2px solid currentColor;
   border-bottom-color: transparent;
   border-radius: 50%;
   display: inline-block;
@@ -56,7 +43,7 @@ button {
 }
 
 .loading.big {
-  @apply border-4 border-main border-b-transparent w-12 h-12
+  @apply border-4 border-main border-b-transparent w-12 h-12;
 }
 
 @keyframes rotation {
@@ -66,6 +53,16 @@ button {
   100% {
       transform: rotate(360deg);
   }
+}
+
+/* A card that has just arrived pulses once, so a new order is noticed without
+   anyone watching the screen. */
+@keyframes arrive {
+  0%   { box-shadow: 0 0 0 0 rgba(241, 93, 54, .45); }
+  100% { box-shadow: 0 0 0 18px rgba(241, 93, 54, 0); }
+}
+.arrive {
+  animation: arrive 1.4s ease-out 2;
 }
 
 select:not([size]) {

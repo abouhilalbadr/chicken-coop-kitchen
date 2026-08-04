@@ -26,7 +26,7 @@ const showAlert = computed(() => {
 </script>
 
 <template>
-<div class="bg-body">
+<div class="bg-body min-h-screen">
   <p class="hidden">{{ showAlert }}</p>
   <router-view></router-view>
 </div>
