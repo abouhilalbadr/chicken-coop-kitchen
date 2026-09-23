@@ -5,6 +5,7 @@ import axios from "axios";
 import "./styles.css";
 import App from "./App.vue";
 import router from "./router";
+import { checkForUpdate } from "./updater";
 
 const pinia = createPinia()
 
@@ -23,3 +24,5 @@ createApp(App)
   .use(pinia)
   .use(router)
   .mount('#app')
+
+checkForUpdate()
