@@ -51,6 +51,9 @@ export const useStore = defineStore('main', {
       this.orders = orders
     },
     logout() {
+      // Otherwise a logged-out screen keeps receiving orders and reloading
+      this.socket?.disconnect()
+      this.socket = null
       this.user = null
       localStorage.removeItem('user')
       this.connected = false;
