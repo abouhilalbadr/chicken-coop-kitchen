@@ -1,15 +1,29 @@
 // One place for the shapes the board reads. Line items are JSON snapshots on
 // the order, so they arrive either parsed or as a string depending on the route.
 
+// Each type has its own solid colour so the cooks tell a Glovo bag from a
+// table order at a glance on the 720p kitchen screens. Glovo keeps its brand
+// yellow, which is what the riders' bags look like.
 const TYPES = [
-  { value: 'SUR_PLACE', name: 'Sur place' },
-  { value: 'A_EMPORTER', name: 'À emporter' },
-  { value: 'LIVRAISON', name: 'Livraison' },
-  { value: 'GRATUIT', name: 'Gratuit' },
-  { value: 'GLOVO', name: 'Glovo' },
+  { value: 'SUR_PLACE', name: 'Sur place', tone: 'bg-[#185fa5] text-white' },
+  { value: 'A_EMPORTER', name: 'À emporter', tone: 'bg-[#534ab7] text-white' },
+  { value: 'LIVRAISON', name: 'Livraison', tone: 'bg-[#0f6e56] text-white' },
+  { value: 'GRATUIT', name: 'Gratuit', tone: 'bg-[#444441] text-white' },
+  { value: 'GLOVO', name: 'Glovo', tone: 'bg-[#ffc244] text-[#3d2c00]' },
 ]
 
 export const typeName = (type) => TYPES.find((t) => t.value === type)?.name || ''
+
+export const typeTone = (type) =>
+  TYPES.find((t) => t.value === type)?.tone || 'bg-[#444441] text-white'
+
+// What goes into a line, each in its own tint: meat red, sauces amber,
+// extras green — the same order the cook builds it in.
+export const DETAILS = [
+  { key: 'viandes', label: 'Viandes', tone: 'bg-[#fcebeb] text-[#791f1f]' },
+  { key: 'sauces', label: 'Sauces', tone: 'bg-[#faeeda] text-[#633806]' },
+  { key: 'extras', label: 'Extras', tone: 'bg-[#eaf3de] text-[#27500a]' },
+]
 
 export const parseProducts = (products) => {
   if (typeof products === 'string') {
@@ -49,3 +63,11 @@ export const waitTone = (minutes) => {
   if (minutes >= 15) return 'warning'
   return 'neutral'
 }
+
+// The waiting time sits on the coloured header, where the tinted badges would
+// vanish (a yellow "late" on a Glovo header): a white pill, solid red once urgent.
+export const waitPill = (minutes) => ({
+  neutral: 'bg-white/90 text-black/75',
+  warning: 'bg-white text-[#a35a00] font-bold',
+  danger: 'bg-danger text-white font-bold ring-2 ring-white',
+}[waitTone(minutes)])

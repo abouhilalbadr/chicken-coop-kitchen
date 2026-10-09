@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 
 import Badge from './ui/Badge.vue'
-import { typeName, parseProducts, itemCount, minutesSince, waitLabel, waitTone } from '../utils/order'
+import { typeName, typeTone, DETAILS, parseProducts, itemCount, minutesSince, waitLabel, waitTone } from '../utils/order'
 
 const props = defineProps({ item: { type: Object, required: true } })
 
@@ -19,7 +19,9 @@ const waited = computed(() => minutesSince(props.item.createdAt))
         <span class="font-bree-serif text-[44px] leading-none text-main">N° {{ item.number }}</span>
       </div>
       <div class="ml-auto flex items-center gap-2">
-        <Badge tone="neutral" size="lg">{{ typeName(item.type) }}</Badge>
+        <span class="rounded-full px-4 py-1 text-[17px] font-bold uppercase tracking-[.04em]" :class="typeTone(item.type)">
+          {{ typeName(item.type) }}
+        </span>
         <Badge tone="neutral" size="lg">{{ count }} article{{ count > 1 ? 's' : '' }}</Badge>
         <Badge v-if="waited !== null" :tone="waitTone(waited)" size="lg">{{ waitLabel(waited) }}</Badge>
       </div>
@@ -46,20 +48,17 @@ const waited = computed(() => minutesSince(props.item.createdAt))
               <span v-if="product.size" class="uppercase text-main">({{ product.size }})</span>
             </h3>
           </div>
-          <dl class="flex flex-col gap-1 text-[17px]">
-            <div v-if="product.viandes?.length" class="flex gap-2.5">
-              <dt class="text-black/45 shrink-0 w-20">Viandes</dt>
-              <dd class="text-black/90">{{ product.viandes.join(', ') }}</dd>
-            </div>
-            <div v-if="product.sauces?.length" class="flex gap-2.5">
-              <dt class="text-black/45 shrink-0 w-20">Sauces</dt>
-              <dd class="text-black/90">{{ product.sauces.join(', ') }}</dd>
-            </div>
-            <div v-if="product.extras?.length" class="flex gap-2.5">
-              <dt class="text-black/45 shrink-0 w-20">Extras</dt>
-              <dd class="text-black/90">{{ product.extras.join(', ') }}</dd>
-            </div>
-          </dl>
+          <div v-if="DETAILS.some((d) => product[d.key]?.length)" class="flex flex-col gap-1.5">
+            <p
+              v-for="detail in DETAILS.filter((d) => product[d.key]?.length)"
+              :key="detail.key"
+              class="rounded-lg px-3 py-1.5 text-[20px] leading-snug font-bold"
+              :class="detail.tone"
+            >
+              <span class="text-[13px] font-medium uppercase tracking-[.06em] opacity-75 mr-1.5">{{ detail.label }}</span>
+              {{ product[detail.key].join(', ') }}
+            </p>
+          </div>
           <p v-if="product.note" class="rounded-lg bg-yellow/[.22] border-l-[3px] border-third px-3.5 py-2 text-[17px] text-[#7a5c00]">
             {{ product.note }}
           </p>

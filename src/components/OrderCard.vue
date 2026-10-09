@@ -1,14 +1,11 @@
 <script setup>
 import { computed } from 'vue'
 
-import Badge from './ui/Badge.vue'
-import { typeName, parseProducts, itemCount, minutesSince, waitLabel, waitTone } from '../utils/order'
+import { typeName, typeTone, DETAILS, parseProducts, itemCount, minutesSince, waitLabel, waitPill } from '../utils/order'
 
 const props = defineProps({
   item: { type: Object, required: true },
   showDetails: { type: Boolean, default: true },
-  // The column the card sits in colours its number and its action
-  accent: { type: String, default: 'main' }, // main | third | green
   now: { type: Number, default: 0 },
 })
 
@@ -18,12 +15,6 @@ const products = computed(() => parseProducts(props.item.products))
 const count = computed(() => itemCount(props.item.products))
 // `now` ticks once a minute in the board, which is what re-runs this
 const waited = computed(() => (props.now, minutesSince(props.item.createdAt)))
-
-const accents = {
-  main: 'text-main',
-  third: 'text-[#a37600]',
-  green: 'text-second',
-}
 
 const advanceLabel = computed(() =>
   props.item.status === 'EN_ATTENTE' ? 'Commencer' : 'Terminer'
@@ -36,22 +27,23 @@ const advanceLabel = computed(() =>
       transition-shadow hover:shadow-lg"
     @click="emit('open', item)"
   >
-    <!-- Header: the number is the biggest thing on the card, everything else
-         qualifies it -->
-    <div class="flex items-center gap-3 px-4 py-2.5">
-      <div class="flex items-baseline gap-1.5 min-w-0">
-        <span class="text-black/40 text-[15px] font-medium">N°</span>
-        <span class="font-bree-serif text-[32px] leading-none" :class="accents[accent]">{{ item.number }}</span>
-      </div>
-      <div class="ml-auto flex items-center gap-2">
-        <Badge tone="neutral">{{ typeName(item.type) }}</Badge>
-        <Badge v-if="waited !== null" :tone="waitTone(waited)">{{ waitLabel(waited) }}</Badge>
-      </div>
+    <!-- Header: painted in the order type's colour, so a Glovo bag or a
+         table order reads from across the kitchen on the 720p screens -->
+    <div class="flex items-center gap-2.5 px-4 py-2.5" :class="typeTone(item.type)">
+      <span class="font-bree-serif text-[32px] leading-none">N° {{ item.number }}</span>
+      <span class="ml-auto text-[19px] font-bold uppercase tracking-[.04em] truncate">{{ typeName(item.type) }}</span>
+      <span
+        v-if="waited !== null"
+        class="shrink-0 rounded-full px-2.5 py-[3px] text-[13px] font-medium tabular-nums whitespace-nowrap"
+        :class="waitPill(waited)"
+      >
+        {{ waitLabel(waited) }}
+      </span>
     </div>
 
     <!-- Lines. On the done column they collapse to a count: nobody cooks from
          a finished ticket. -->
-    <div v-if="showDetails" class="border-t border-border divide-y divide-border">
+    <div v-if="showDetails" class="divide-y divide-border">
       <div v-for="(product, index) in products" :key="index" class="px-4 py-2.5">
         <div class="flex items-baseline gap-2.5">
           <span
@@ -65,27 +57,26 @@ const advanceLabel = computed(() =>
             <span v-if="product.size" class="uppercase text-main">({{ product.size }})</span>
           </h3>
         </div>
-        <dl v-if="product.viandes?.length || product.sauces?.length || product.extras?.length" class="mt-1.5 flex flex-col gap-1 text-[15px]">
-          <div v-if="product.viandes?.length" class="flex gap-2">
-            <dt class="text-black/45 shrink-0">Viandes</dt>
-            <dd class="text-black/85">{{ product.viandes.join(', ') }}</dd>
-          </div>
-          <div v-if="product.sauces?.length" class="flex gap-2">
-            <dt class="text-black/45 shrink-0">Sauces</dt>
-            <dd class="text-black/85">{{ product.sauces.join(', ') }}</dd>
-          </div>
-          <div v-if="product.extras?.length" class="flex gap-2">
-            <dt class="text-black/45 shrink-0">Extras</dt>
-            <dd class="text-black/85">{{ product.extras.join(', ') }}</dd>
-          </div>
-        </dl>
+        <!-- Meats, sauces, extras: what the cook builds from, so each is a
+             tinted band in bold rather than grey small print -->
+        <div v-if="DETAILS.some((d) => product[d.key]?.length)" class="mt-2 flex flex-col gap-1">
+          <p
+            v-for="detail in DETAILS.filter((d) => product[d.key]?.length)"
+            :key="detail.key"
+            class="rounded-md px-2.5 py-1 text-[17px] leading-snug font-bold"
+            :class="detail.tone"
+          >
+            <span class="text-[12px] font-medium uppercase tracking-[.06em] opacity-75 mr-1">{{ detail.label }}</span>
+            {{ product[detail.key].join(', ') }}
+          </p>
+        </div>
         <!-- A note is an instruction, not a detail: it gets its own band -->
-        <p v-if="product.note" class="mt-2 rounded-lg bg-yellow/[.22] border-l-[3px] border-third px-3 py-1.5 text-[15px] text-[#7a5c00]">
+        <p v-if="product.note" class="mt-2 rounded-lg bg-yellow/[.22] border-l-[3px] border-third px-3 py-1.5 text-[16px] font-medium text-[#7a5c00]">
           {{ product.note }}
         </p>
       </div>
     </div>
-    <div v-else class="px-4 pb-3 text-[15px] text-black/50">
+    <div v-else class="px-4 py-2.5 text-[15px] text-black/50">
       {{ count }} article{{ count > 1 ? 's' : '' }}
     </div>
 
