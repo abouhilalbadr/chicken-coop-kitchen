@@ -1,6 +1,6 @@
 <script setup>
 import { useRouter } from 'vue-router'
-import { computed, onMounted, onUnmounted, ref } from "vue"
+import { computed, onMounted, ref } from "vue"
 import axios from 'axios'
 
 import Header from "../components/Header.vue";
@@ -17,9 +17,6 @@ const showModal = ref(false)
 const loading = ref(true)
 const saving = ref(false)
 const order = ref({})
-// Re-read every minute so the wait badges age on their own
-const now = ref(Date.now())
-let ticker
 
 // The three columns of the board, in the order the ticket moves through them.
 const COLUMNS = [
@@ -112,10 +109,7 @@ const advance = async (item) => {
 onMounted(() => {
   checkUser()
   getTodayOrders()
-  ticker = setInterval(() => (now.value = Date.now()), 60000)
 })
-
-onUnmounted(() => clearInterval(ticker))
 </script>
 
 <template>
@@ -167,7 +161,6 @@ onUnmounted(() => clearInterval(ticker))
           :key="item.id"
           :item="item"
           :show-details="column.details"
-          :now="now"
           @open="showOrder"
           @advance="advance"
         />
