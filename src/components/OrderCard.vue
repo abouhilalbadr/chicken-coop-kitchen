@@ -1,20 +1,17 @@
 <script setup>
 import { computed } from 'vue'
 
-import { typeName, typeTone, DETAILS, parseProducts, itemCount, minutesSince, waitLabel, waitPill } from '../utils/order'
+import { typeName, typeTone, DETAILS, parseProducts, itemCount } from '../utils/order'
 
 const props = defineProps({
   item: { type: Object, required: true },
   showDetails: { type: Boolean, default: true },
-  now: { type: Number, default: 0 },
 })
 
 const emit = defineEmits(['open', 'advance'])
 
 const products = computed(() => parseProducts(props.item.products))
 const count = computed(() => itemCount(props.item.products))
-// `now` ticks once a minute in the board, which is what re-runs this
-const waited = computed(() => (props.now, minutesSince(props.item.createdAt)))
 
 const advanceLabel = computed(() =>
   props.item.status === 'EN_ATTENTE' ? 'Commencer' : 'Terminer'
@@ -29,16 +26,9 @@ const advanceLabel = computed(() =>
   >
     <!-- Header: painted in the order type's colour, so a Glovo bag or a
          table order reads from across the kitchen on the 720p screens -->
-    <div class="flex items-center gap-2.5 px-4 py-2.5" :class="typeTone(item.type)">
-      <span class="font-bree-serif text-[32px] leading-none">N° {{ item.number }}</span>
-      <span class="ml-auto text-[19px] font-bold uppercase tracking-[.04em] truncate">{{ typeName(item.type) }}</span>
-      <span
-        v-if="waited !== null"
-        class="shrink-0 rounded-full px-2.5 py-[3px] text-[13px] font-medium tabular-nums whitespace-nowrap"
-        :class="waitPill(waited)"
-      >
-        {{ waitLabel(waited) }}
-      </span>
+    <div class="flex items-center gap-3 px-4 py-2.5" :class="typeTone(item.type)">
+      <span class="shrink-0 whitespace-nowrap font-bree-serif text-[32px] leading-none">N° {{ item.number }}</span>
+      <span class="ml-auto min-w-0 text-right text-[19px] font-bold uppercase tracking-[.04em] leading-tight">{{ typeName(item.type) }}</span>
     </div>
 
     <!-- Lines. On the done column they collapse to a count: nobody cooks from
