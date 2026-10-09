@@ -23,9 +23,9 @@ let ticker
 
 // The three columns of the board, in the order the ticket moves through them.
 const COLUMNS = [
-  { status: 'EN_ATTENTE', title: 'En attente', accent: 'main', dot: 'bg-main', details: true },
-  { status: 'EN_COURS', title: 'En cours', accent: 'third', dot: 'bg-third', details: true },
-  { status: 'TERMINEE', title: 'Terminées', accent: 'green', dot: 'bg-second', details: false },
+  { status: 'EN_ATTENTE', title: 'En attente', dot: 'bg-main', details: true },
+  { status: 'EN_COURS', title: 'En cours', dot: 'bg-third', details: true },
+  { status: 'TERMINEE', title: 'Terminées', dot: 'bg-second', details: false },
 ]
 
 const statusText = computed(() =>
@@ -167,7 +167,6 @@ onUnmounted(() => clearInterval(ticker))
           :key="item.id"
           :item="item"
           :show-details="column.details"
-          :accent="column.accent"
           :now="now"
           @open="showOrder"
           @advance="advance"
